@@ -58,8 +58,6 @@ provisioner:
   env:
     ANSIBLE_STRATEGY_PLUGINS: ${VIRTUAL_ENV}/lib/python3.8/site-packages/ansible_mitogen/plugins/strategy/
     ANSIBLE_STRATEGY: mitogen_linear
-    #ANSIBLE_SSH_PIPELINING: true
-    #ANSIBLE_CALLBACK_ENABLED: profile_tasks
     ANSIBLE_CALLBACK_WHITELIST: profile_tasks, timer
 verifier:
   name: ansible
