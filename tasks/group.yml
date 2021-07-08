@@ -1,0 +1,8 @@
+---
+# tasks file for ri_role_user_mgmt
+
+- name: USER MGMT (group) | Creating user group.
+  group:
+    name: "{{ item.name }}"
+    state: "{{ item.status }}"
+  with_items: "{{ user_groups }}"

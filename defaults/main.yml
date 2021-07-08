@@ -1,0 +1,6 @@
+---
+# defaults file for ri_role_user_mgmt
+
+ssh_users: []
+user_groups: []
+sudoers_dir: /etc/sudoers.d

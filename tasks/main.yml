@@ -1,0 +1,14 @@
+---
+# tasks file for ri_role_user_mgmt
+
+- name: USER MGMT (group) | Import group configuration tasks.
+  import_tasks: group.yml
+  when: user_groups is defined
+
+- name: USER MGMT (user) | Import user configuration tasks.
+  import_tasks: user.yml
+  when: ssh_users is defined or user_groups is defined
+
+- name: USER MGMT (sudoers) | Import sudoers configuration tasks.
+  import_tasks: sudoers.yml
+  when: user_groups is defined

@@ -1,0 +1,17 @@
+---
+  
+- name: Converge
+  hosts: all
+  vars:
+    ssh_users:
+      - {name: "test-user1", groups: "{{ user_groups.1.name }}", status: "present", key: "{{ lookup('file', '../../tests/extras/pub_keys/test-user1.pub') }}"}
+      - {name: "test-user2", groups: "{{ user_groups.0.name }}", status: "present", key: "{{ lookup('file', '../../tests/extras/pub_keys/test-user2.pub') }}"}
+      - {name: "test-user3", groups: "{{ user_groups.1.name }}", status: "present", key: "{{ lookup('file', '../../tests/extras/pub_keys/test-user3.pub') }}"}
+    user_groups:
+      - {name: "linux_admins", status: "present", priviliges: "ALL=(ALL) NOPASSWD: ALL"}
+      - {name: "linux_devops", status: "present", priviliges: "ALL=(ALL) NOPASSWD:/usr/sbin/lvm"}
+      - {name: "linux_users", status: "absent"}
+  tasks:
+    - name: "Include ri_role_user_mgmt"
+      include_role:
+        name: "ri_role_user_mgmt"

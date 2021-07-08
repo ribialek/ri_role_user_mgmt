@@ -1,0 +1,20 @@
+galaxy_info:
+  role_name: role_user_mgmt
+  author: Rafal Bialek
+  description: User Management role for RedHat/CentOS distribution
+  company: River Island Clothing Co. Limited
+  license: license (BSD, MIT)
+  min_ansible_version: 2.9
+  platforms:
+    - name: Centos
+      versions:
+        - 6
+        - 7
+        - 8
+
+  galaxy_tags:
+    - user
+    - groups
+    - sudoers
+
+dependencies: []

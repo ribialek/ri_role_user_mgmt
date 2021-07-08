@@ -1,0 +1,19 @@
+---
+# tasks file for ri_role_user_mgmt
+
+- name: USER MGMT (sudoers) | Generating sudoers configs.
+  template:
+    src: "{{ sudoers_dir | regex_replace('^\\/', '') }}/sudoers.j2"
+    dest: "{{ sudoers_dir }}/{{ item.name }}"
+    owner: root
+    group: root
+    mode: 0400
+  with_items: "{{ user_groups }}"
+  when: item.status != "absent"
+
+- name: USER MGMT (sudoers) | Remove sudoers configs if group removed.
+  file:
+    path: "{{ sudoers_dir }}/{{ item.name }}"
+    state: "{{ item.status }}"
+  with_items: "{{ user_groups }}"
+  when: item.status == "absent"

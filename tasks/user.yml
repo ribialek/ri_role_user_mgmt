@@ -1,0 +1,35 @@
+---
+# tasks file for ri_role_user_mgmt
+
+- name: USER MGMT (user) | Creating user.
+  user:
+    name: "{{ item.name }}"
+    state: "{{ item.status }}"
+    remove: yes
+  with_items: "{{ ssh_users }}"
+  when:
+    - ssh_users is defined
+
+- name: USER MGMT (user) | Adding user to a group.
+  user:
+    name: "{{ item.0.name }}"
+    groups: "{{ item.0.groups }}"
+    append: no
+  with_nested:
+    - "{{ ssh_users }}"
+    - "{{ user_groups }}"
+  when:
+    - ssh_users is defined
+    - user_groups is defined
+    - item.1.status == "present"
+    - item.1.name in item.0.groups
+
+- name: USER MGMT (user) | Enabling key based ssh access for user.
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.key }}"
+    state: "{{ item.status }}"
+  with_items: "{{ ssh_users }}"
+  when:
+    - ssh_users is defined
+    - item.status == "present"
