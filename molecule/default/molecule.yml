@@ -14,6 +14,11 @@ platforms:
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+  - name: rhel6
+    image: "roboxes/rhel6:latest"
+    pre_build_image: true
   - name: centos7
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
@@ -21,6 +26,13 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
+  - name: rhel7
+    image: "quay.io/samdoran/${MOLECULE_DISTRIBUTION:-rhel7}-ansible:latest"
+    command: ${MOLECULE_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: yes
+    pre_build_image: yes
   - name: centos8
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos8}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
@@ -28,9 +40,26 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
+  - name: rhel8
+    image: "quay.io/samdoran/${MOLECULE_DISTRIBUTION:-rhel8}-ansible:latest"
+    command: ${MOLECULE_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: yes
+    pre_build_image: yes
 provisioner:
   name: ansible
+  inventory:
+    host_vars:
+      centos8:
+        ansible_python_interpreter: "/usr/bin/python3"
+      rhel8:
+        ansible_python_interpreter: "/usr/bin/python3"
   env:
-    ANSIBLE_CALLBACK_ENABLED: profile_tasks
+    ANSIBLE_STRATEGY_PLUGINS: ${VIRTUAL_ENV}/lib/python3.8/site-packages/ansible_mitogen/plugins/strategy/
+    ANSIBLE_STRATEGY: mitogen_linear
+    #ANSIBLE_SSH_PIPELINING: true
+    #ANSIBLE_CALLBACK_ENABLED: profile_tasks
+    ANSIBLE_CALLBACK_WHITELIST: profile_tasks, timer
 verifier:
   name: ansible
